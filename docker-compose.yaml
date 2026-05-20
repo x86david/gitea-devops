@@ -1,0 +1,41 @@
+services:
+  gitea:
+    image: gitea/gitea:1.26
+    container_name: gitea
+    restart: always
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=sqlite3
+      - GITEA__server__ROOT_URL=http://localhost:3000/
+      - GITEA__server__HTTP_PORT=3000
+    ports:
+      - "3000:3000"
+      - "2222:2222"
+    volumes:
+      - ./gitea-data:/data
+    networks:
+      - gitea_net
+
+  gitea-runner:
+    build:
+      context: .
+      dockerfile: runner.Dockerfile
+    container_name: gitea-runner
+    restart: always
+    environment:
+      - GITEA_INSTANCE_URL=http://gitea:3000
+      - GITEA_RUNNER_REGISTRATION_TOKEN=SKH5MugO6SYhs0UafvqxlYdYB2nagGj5On5SsyBw
+      - GITEA_RUNNER_NAME=local-runner
+      - GITEA_RUNNER_LABELS=self-hosted
+    volumes:
+      - ./runner-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - gitea_net
+    depends_on:
+      - gitea
+
+networks:
+  gitea_net:
+    driver: bridge
