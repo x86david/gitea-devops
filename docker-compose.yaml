@@ -23,6 +23,7 @@ services:
       dockerfile: runner.Dockerfile
     container_name: gitea-runner
     restart: always
+    user: "0:0"  # This allows the runner to use the host's docker.sock
     environment:
       - GITEA_INSTANCE_URL=http://gitea:3000
       - GITEA_RUNNER_REGISTRATION_TOKEN=SKH5MugO6SYhs0UafvqxlYdYB2nagGj5On5SsyBw
