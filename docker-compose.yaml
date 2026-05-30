@@ -36,7 +36,7 @@ services:
       - gitea_net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.gitea.rule=Host(`lenpc.dsystems`)"
+      - "traefik.http.routers.gitea.rule=Host(`lenpc.dsystems`) || Host(`lenpc-remote.dsystems`)"
       - "traefik.http.routers.gitea.entrypoints=websecure"
       - "traefik.http.routers.gitea.tls.certresolver=myresolver"
       - "traefik.http.services.gitea.loadbalancer.server.port=3000"
